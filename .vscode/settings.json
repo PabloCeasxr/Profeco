@@ -1,0 +1,10 @@
+{
+    "liveServer.settings.ignoreFiles": [
+        "uploads/**",
+        ".vscode/**",
+        "**/*.scss",
+        "**/*.sass",
+        "**/*.ts"
+    ],
+    "workbench.iconTheme": "vscode-ghibli-icon-theme"
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>ProFeCo App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles/sanciones.css'>
+    <link href='../utils/images/favicon.png' rel='icon'>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <!-- <script src='main.js'></script> -->
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <section class="container">
+                <div class="logo">
+                    <a href="index.html"><img src="../utils/images/logo.png"
+                            alt="Procuraduría Federal del Consumidor"></a>
+                </div>
+                <div class="title">
+                    <h1 class="title-text">ProFeCo App</h1>
+                </div>
+                <div class="user">
+                    <div class="userText">
+                        <h1><span class="dropdown-arrow">▼</span></h1>
+                        <ul>
+                            <li><button onclick="mostrarListaUsuarios()">Administrar usuarios</button></li>
+                            <li><button onclick="mostrarListaProductos()">Administrar productos</button></li>
+                            <li><button onclick="cerrarSesion()">Cerrar sesión</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </header>
+        <main>
+            <section class="main-container">
+                <div class="principal">
+                    <div class="contenedor">
+                        <div class="titulo">
+                            <h1>Sistema de sanciones</h1>
+                        </div>
+                        <div class="content">
+                            <button class="button-sancionar"
+                                onclick="sancionar()">SANCIONAR</button>
+                            <div class="botones">
+                                <button class="regresar" onclick="window.location.reload()">Actualizar</button>
+                                <button class="regresar" onclick="window.history.back()">Regresar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="oculto">NO HAY REPORTES EN ESTE MOMENTO</h1>
+                    <div class="table-container">
+
+                    </div>
+                </div>
+                <footer>
+                    <p>Desarrollado por equipo ProFeCo</p>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <script src='../sistemaUsuarios/services/verificar.service.js' ruta="sistema_sanciones.html"></script>
+    <script src='../sistemaUsuarios/services/cerrarSesion.service.js'></script>
+    <script src='../sistemaUsuarios/services/sancionar.service.js'></script>
+    <script src='./scripts.views/listaUsuarios.script.js'></script>
+    <script src='./scripts.views/listaProductos.script.js'></script>
+    <script src='./scripts.views/inconsistencias.script.js'></script>
+    <script src='https://cdn.socket.io/4.7.5/socket.io.min.js'></script>
+    <script src='./scripts.views/alerta.js'></script>
+    <script>
+        var socket = io('http://localhost:3000');
+
+        socket.on('delete-product', function (msg) {
+            const url = new URL(window.location.href);
+            const id = url.searchParams.get('id');
+            document.querySelector(".table-container").innerHTML = '';
+            generarTabla(id);
+        });
+        socket.on('report-product', function (msg) {
+            const oculto = document.querySelector(".oculto");
+            oculto.textContent = "Se han agregado reportes, actualiza!"
+            oculto.style.display = "block";
+            oculto.style.marginTop = 0;
+            oculto.style.marginBottom = "2%";
+        });
+    </script>
+</body>
+
+</html>

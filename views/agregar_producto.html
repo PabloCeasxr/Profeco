@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>ProFeCo App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles/agregar.css'>
+    <link href='../utils/images/favicon.png' rel='icon'>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <!-- <script src='main.js'></script> -->
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <section class="container">
+                <div class="logo">
+                    <img src="../utils/images/logo.png" alt="Procuraduría Federal del Consumidor"></a>
+                </div>
+                <div class="title">
+                    <h1 class="title-text">ProFeCo App</h1>
+                </div>
+                <div class="user">
+                    <div class="userText">
+                        <h1><span class="dropdown-arrow">▼</span></h1>
+                        <ul>
+                            <li><a href="reportes.html">Generar reportes</a></li>
+                            <li><button onclick="cerrarSesion()">Cerrar sesión</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </header>
+        <main>
+            <section class="main-container">
+                <div class="principal">
+                    <div class="titulo-container">
+                        <h1>Agregar producto</h1>
+                        <button class="regresar"
+                            onclick="window.location.href = 'productos_empresa.html'">Regresar</button>
+                    </div>
+                    <div class="input-container">
+                        <div class="text-input">
+                            <h2>Nombre</h2>
+                            <input type="text" id="nombre" name="nombre">
+                        </div>
+                        <div class="text-input">
+                            <h2>Precio</h2>
+                            <input type="text" id="precio" name="precio">
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <div class="text-input">
+                            <h2>Oferta</h2>
+                            <input type="text" id="oferta" name="oferta">
+                        </div>
+                        <div class="desc-input">
+                            <h2>Descripción</h2>
+                            <textarea id="descripcion" name="descripcion" rows="4" cols="50"></textarea>
+                        </div>
+                    </div>
+                    <div class="etiquetas-container">
+                        <div class="image-input">
+                            <h2>Importar Imagen</h2>
+                            <input type="file" id="imagen" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="etiquetas-container">
+                        <div class="text-input" id="etiquetas-caja">
+                            <h2>Etiquetas</h2>
+                        </div>
+                        <div class="etiquetas">
+                            <button onclick="agregarInput()" id="+">+</button>
+                        </div>
+                    </div>
+                    <div class="contenedor">
+                        <button type="button" onclick="crearProducto()" id="agregar">Agregar</button>
+                    </div>
+                </div>
+                <footer>
+                    <p>Desarrollado por equipo ProFeCo</p>
+                </footer>
+            </section>
+        </main>
+    </div>
+    <script src='../sistemaUsuarios/services/verificar.service.js' ruta="agregar_producto.html"></script>
+    <script src='../sistemaProductos/services/crearProducto.service.js'></script>
+    <script src='../sistemaProductos/services/actualizarProducto.service.js'></script>
+    <script src='../sistemaUsuarios/services/cerrarSesion.service.js'></script>
+    <script src='./scripts.views/agregar_producto.script.js'></script>
+    <script src='https://cdn.socket.io/4.7.5/socket.io.min.js'></script>
+    <script src='./scripts.views/alerta.js'></script>
+    <script>
+        document.getElementById('imagen').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const fileType = file.type;
+
+            if (!fileType.startsWith('image/')) {
+                customAlert.alert("Por favor, selecciona un archivo de imagen.");
+                event.target.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

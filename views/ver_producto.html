@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>ProFeCo App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles/ver.css'>
+    <link href='../utils/images/favicon.png' rel='icon'>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <!-- <script src='main.js'></script> -->
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <section class="container">
+                <div class="logo">
+                    <a href="index.html"><img src="../utils/images/logo.png"
+                            alt="Procuraduría Federal del Consumidor"></a>
+                </div>
+                <div class="title">
+                    <h1 class="title-text">ProFeCo App</h1>
+                </div>
+                <div class="search-container">
+                    <input type="text" placeholder="Busca por producto, servicio o categoría..." class="search-input"
+                        id="search-input">
+                    <button type="submit" class="search-button" id="search-button">
+                        <img src="../utils/images/search.png" alt="Icono de búsqueda">
+                    </button>
+                </div>
+                <div class="user">
+                    <div class="userText">
+                        <h1><span class="dropdown-arrow">▼</span></h1>
+                        <ul>
+                            <li><button onclick="mostrarLista()">Ver lista</button></li>
+                            <li><button onclick="cerrarSesion()">Cerrar sesión</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </header>
+        <main>
+            <section class="main-container">
+                <div class="principal">
+
+                </div>
+
+                <footer id="footer">
+                    <p>Desarrollado por equipo ProFeCo</p>
+                </footer>
+            </section>
+        </main>
+        <script src='../sistemaUsuarios/services/verificar.service.js' ruta="ver_producto.html"></script>
+        <script src='../sistemaUsuarios/services/cerrarSesion.service.js'></script>
+        <script src='../sistemaProductos/services/verProducto.service.js'></script>
+        <script src='../sistemaProductos/services/agregarProductoLista.service.js'></script>
+        <script src='../sistemaProductos/services/calificarProducto.service.js'></script>
+        <script src='../sistemaProductos/services/reportarProducto.service.js'></script>
+        <script src='./scripts.views/alerta.js'></script>
+        <script src='./scripts.views/listaUsuarios.script.js'></script>
+        <script src='./scripts.views/listaProductos.script.js'></script>
+        <script src='./scripts.views/lista.script.js'></script>
+        <script src='https://cdn.socket.io/4.7.5/socket.io.min.js'></script>
+        <script>
+            var socket = io('http://localhost:3000');
+
+            socket.on('delete-product', function (msg) {
+                const url = new URL(window.location.href);
+                const productoId = url.searchParams.get('id');
+                if (productoId === msg.productoId.toString()) {
+                    customAlert.alertBack("Se ha eliminado este producto", "Aviso!");
+                }
+            });
+            socket.on('update-product', function (msg) {
+                const url = new URL(window.location.href);
+                const productoId = url.searchParams.get('id');
+
+                verProducto(productoId);
+                customAlert.alert("Se ha actualizado este producto", "Aviso!");
+            });
+            socket.on('report-product', function (msg) {
+                const url = new URL(window.location.href);
+                const productoId = url.searchParams.get('id');
+                const oculto = document.querySelector(".oculto");
+                if (productoId === msg.productoId.toString()) {
+                    oculto.style.display = "block";
+                }
+            });
+        </script>
+        <script>
+            function mostrar() {
+                document.querySelectorAll(".reporte").forEach(element => {
+                    element.style.display = "block";
+                });
+                const boton = document.querySelector(".button-reportar");
+                boton.textContent = "Ocultar";
+                boton.onclick = ocultar;
+            }
+            function ocultar() {
+                document.querySelectorAll(".reporte").forEach(element => {
+                    element.style.display = "none";
+                    if (element.tagName.toLowerCase() === 'textarea') {
+                        element.value = '';
+                    }
+                });
+                const boton = document.querySelector(".button-reportar");
+                boton.textContent = "Reportar";
+                boton.onclick = mostrar;
+            }
+        </script>
+
+        <script>
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+
+            searchButton.addEventListener('click', () => {
+                const url = `resultados.html?search=${searchInput.value}`;
+
+                if (searchInput.value !== "") {
+                    window.location.href = url;
+                } else {
+                    window.location.reload();
+                };
+
+            });
+
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    const url = `resultados.html?search=${searchInput.value}`;
+
+                    if (searchInput.value !== "") {
+                        console.log(searchInput);
+                        window.location.href = url;
+                    } else {
+                        console.log(searchInput);
+                        window.location.reload();
+                    };
+
+                };
+            });
+        </script>
+    </div>
+</body>
+
+</html>
